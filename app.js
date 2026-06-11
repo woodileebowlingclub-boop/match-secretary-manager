@@ -23,6 +23,10 @@ const starterData = {
     teamFormat: "Rinks / squads",
     notes: "Use this area to tailor labels, fixtures, team roles, divisions, and reporting needs for each club."
   },
+  admin: {
+    name: "Club Admin",
+    password: "admin123"
+  },
   fixtures: [
     { id: id(), date: "2025-06-14", time: "14:00", home: "Your Club", away: "Riverside Club", venue: "Home Venue", type: "League", status: "Confirmed" },
     { id: id(), date: "2025-06-21", time: "14:00", home: "Your Club", away: "Hilltop Club", venue: "Home Venue", type: "Friendly", status: "Team due" },
@@ -49,6 +53,7 @@ const starterData = {
 };
 
 let state = loadState();
+let isLoggedIn = sessionStorage.getItem("matchSecretaryLoggedIn") === "yes";
 
 const tabs = [
   ["Dashboard", "dashboard"],
@@ -63,6 +68,11 @@ const tabs = [
 ];
 
 function app() {
+  if (!isLoggedIn) {
+    renderLogin();
+    return;
+  }
+
   document.getElementById("app").innerHTML = `
     <div class="app-shell">
       <header class="topbar">
@@ -74,7 +84,11 @@ function app() {
               <p>${escapeHtml(state.club.sport || "Fixtures")} - Teams - Availability - Results - Reports</p>
             </div>
           </div>
-          <button class="logout" data-action="reset-demo">Reset Demo Data</button>
+          <div class="header-actions">
+            <span class="admin-name">${escapeHtml(state.admin.name)}</span>
+            <button class="logout" data-action="logout">Logout</button>
+            <button class="logout" data-action="reset-demo">Reset Demo Data</button>
+          </div>
         </div>
         <div class="tabs-wrap">
           <nav class="tabs" aria-label="Main sections">
@@ -93,6 +107,33 @@ function app() {
   wirePageActions();
 }
 
+function renderLogin() {
+  document.getElementById("app").innerHTML = `
+    <main class="login-page">
+      <section class="card login-card">
+        <div class="shield login-shield" aria-hidden="true"></div>
+        <h1>${escapeHtml(state.club.name || "Club Match Secretary Manager")}</h1>
+        <p class="meta">Admin access</p>
+        <div class="field">
+          <label for="login-name">Admin name</label>
+          <input id="login-name" value="${escapeAttr(state.admin.name)}" />
+        </div>
+        <div class="field">
+          <label for="login-password">Password</label>
+          <input id="login-password" type="password" placeholder="Enter password" />
+        </div>
+        <button class="button primary full-button" data-action="login">Login</button>
+        ${state.notice ? `<div class="notice compact">${escapeHtml(state.notice)}</div>` : ""}
+      </section>
+    </main>
+  `;
+
+  document.querySelector("[data-action='login']").addEventListener("click", login);
+  document.getElementById("login-password").addEventListener("keydown", (event) => {
+    if (event.key === "Enter") login();
+  });
+}
+
 function wireCommonActions() {
   document.querySelectorAll("[data-tab]").forEach((button) => {
     button.addEventListener("click", () => {
@@ -109,12 +150,21 @@ function wireCommonActions() {
     state = loadState();
     app();
   });
+
+  const logout = document.querySelector("[data-action='logout']");
+  logout.addEventListener("click", () => {
+    isLoggedIn = false;
+    sessionStorage.removeItem("matchSecretaryLoggedIn");
+    state.notice = "";
+    app();
+  });
 }
 
 function wirePageActions() {
   document.querySelectorAll("[data-action]").forEach((element) => {
     const action = element.dataset.action;
     if (action === "save-club") element.addEventListener("click", saveClub);
+    if (action === "save-admin") element.addEventListener("click", saveAdmin);
     if (action === "add-player") element.addEventListener("click", addPlayer);
     if (action === "update-player") element.addEventListener("click", () => updatePlayer(element.dataset.id));
     if (action === "remove-player") element.addEventListener("click", () => removePlayer(element.dataset.id));
@@ -194,8 +244,9 @@ function stat(icon, value, label) {
 
 function clubSetup() {
   return `
-    ${title("Club Setup", `<button class="button primary" data-action="save-club">Save Settings</button>`)}
-    <section class="card panel">
+    ${title("Club Setup", `<button class="button primary" data-action="save-club">Save Club Settings</button>`)}
+    <section class="card panel setup-section">
+      <h3>Club Details</h3>
       <div class="form-grid">
         ${inputField("club-name", "Club name", state.club.name)}
         ${inputField("club-sport", "Sport or activity", state.club.sport)}
@@ -212,6 +263,23 @@ function clubSetup() {
           <label for="club-notes">Customer notes</label>
           <textarea id="club-notes" rows="5">${escapeHtml(state.club.notes)}</textarea>
         </div>
+      </div>
+    </section>
+    <section class="card panel setup-section">
+      <h3>Admin Login</h3>
+      <div class="form-grid">
+        ${inputField("admin-name", "Admin display name", state.admin.name)}
+        <div class="field">
+          <label for="admin-password">Admin password</label>
+          <input id="admin-password" type="password" value="${escapeAttr(state.admin.password)}" />
+        </div>
+        <div class="field">
+          <label>Note</label>
+          <input value="For stronger security, use a hosted version with a real database login." disabled />
+        </div>
+      </div>
+      <div class="actions setup-actions">
+        <button class="button primary" data-action="save-admin">Save Admin Login</button>
       </div>
     </section>
   `;
@@ -455,6 +523,29 @@ function saveClub() {
   };
   state.notice = "Club settings saved.";
   saveAndRender();
+}
+
+function saveAdmin() {
+  state.admin = {
+    name: value("admin-name") || "Club Admin",
+    password: value("admin-password") || "admin123"
+  };
+  state.notice = "Admin login saved.";
+  saveAndRender();
+}
+
+function login() {
+  const name = value("login-name");
+  const password = value("login-password");
+  if (name === state.admin.name && password === state.admin.password) {
+    isLoggedIn = true;
+    sessionStorage.setItem("matchSecretaryLoggedIn", "yes");
+    state.notice = "";
+    app();
+    return;
+  }
+  state.notice = "Admin name or password is incorrect.";
+  renderLogin();
 }
 
 function addPlayer() {
@@ -719,6 +810,7 @@ function loadState() {
 
 function normalizeState(data) {
   data.club = { ...starterData.club, ...(data.club || {}) };
+  data.admin = { ...starterData.admin, ...(data.admin || {}) };
   data.fixtures = (data.fixtures || []).map((fixture) => ({
     id: fixture.id || id(),
     date: fixture.date || today(),
