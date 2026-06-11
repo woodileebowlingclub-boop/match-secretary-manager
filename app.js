@@ -87,7 +87,6 @@ function app() {
           <div class="header-actions">
             <span class="admin-name">${escapeHtml(state.admin.name)}</span>
             <button class="logout" data-action="logout">Logout</button>
-            <button class="logout" data-action="reset-demo">Reset Demo Data</button>
           </div>
         </div>
         <div class="tabs-wrap">
@@ -141,14 +140,6 @@ function wireCommonActions() {
       state.notice = "";
       saveAndRender();
     });
-  });
-
-  const reset = document.querySelector("[data-action='reset-demo']");
-  reset.addEventListener("click", () => {
-    if (!confirm("Reset all demo data? This clears your saved changes in this browser.")) return;
-    localStorage.removeItem(storageKey);
-    state = loadState();
-    app();
   });
 
   const logout = document.querySelector("[data-action='logout']");
