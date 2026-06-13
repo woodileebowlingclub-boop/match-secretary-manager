@@ -1,100 +1,75 @@
-const icons = {
-  dashboard: `<svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/></svg>`,
-  fixtures: `<svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="17" rx="2"/><path d="M8 2v4M16 2v4M3 10h18"/></svg>`,
-  availability: `<svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="8" r="4"/><path d="M3 21v-2a6 6 0 0 1 9-5.2"/><path d="m16 19 2 2 4-5"/></svg>`,
-  team: `<svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>`,
-  trophy: `<svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 21h8M12 17v4"/><path d="M7 4h10v5a5 5 0 0 1-10 0V4Z"/><path d="M5 5H3v3a4 4 0 0 0 4 4"/><path d="M19 5h2v3a4 4 0 0 1-4 4"/></svg>`,
-  results: `<svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19V5"/><path d="M8 17V7"/><path d="M12 19v-7"/><path d="M16 15V5"/><path d="M20 19V9"/></svg>`,
-  reports: `<svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16v16H4z"/><path d="M8 16v-4M12 16V8M16 16v-6"/></svg>`,
-  list: `<svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 6h13M8 12h13M8 18h13"/><path d="M3 6h.01M3 12h.01M3 18h.01"/></svg>`,
-  setup: `<svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.8 1.8 0 0 0 .36 2l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.8 1.8 0 0 0-2-.36 1.8 1.8 0 0 0-1 1.64V21a2 2 0 1 1-4 0v-.09a1.8 1.8 0 0 0-1-1.64 1.8 1.8 0 0 0-2 .36l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.8 1.8 0 0 0 .36-2 1.8 1.8 0 0 0-1.64-1H3a2 2 0 1 1 0-4h.09a1.8 1.8 0 0 0 1.64-1 1.8 1.8 0 0 0-.36-2l-.06-.06A2 2 0 1 1 7.14 3.9l.06.06a1.8 1.8 0 0 0 2 .36 1.8 1.8 0 0 0 1-1.64V3a2 2 0 1 1 4 0v.09a1.8 1.8 0 0 0 1 1.64 1.8 1.8 0 0 0 2-.36l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.8 1.8 0 0 0-.36 2 1.8 1.8 0 0 0 1.64 1H21a2 2 0 1 1 0 4h-.09a1.8 1.8 0 0 0-1.51 1Z"/></svg>`
-};
+const STORAGE_KEY = "clubMatchSecretaryManagerEtsyV1";
 
-const storageKey = "matchSecretaryApp";
-
-const starterData = {
-  active: "Dashboard",
-  club: {
-    name: "Your Club",
-    sport: "Bowls, football, darts, pool, tennis...",
-    venue: "Home Venue",
-    contact: "Match Secretary",
-    email: "secretary@exampleclub.com",
-    teamFormat: "Rinks / squads",
-    notes: "Use this area to tailor labels, fixtures, team roles, divisions, and reporting needs for each club."
+const demoData = {
+  clubName: "Club Name",
+  clubType: "Sports Club",
+  clubVenue: "",
+  clubContact: "",
+  clubEmail: "",
+  clubPhone: "",
+  pin: "1234",
+  colours: {
+    header: "#173b69",
+    section: "#2f8b57",
+    button: "#2f8b57"
   },
-  admin: {
-    name: "Club Admin",
-    password: "admin123"
-  },
-  fixtures: [
-    { id: id(), date: "2025-06-14", time: "14:00", home: "Your Club", away: "Riverside Club", venue: "Home Venue", type: "League", status: "Confirmed" },
-    { id: id(), date: "2025-06-21", time: "14:00", home: "Your Club", away: "Hilltop Club", venue: "Home Venue", type: "Friendly", status: "Team due" },
-    { id: id(), date: "2025-06-28", time: "13:30", home: "Lakeside Club", away: "Your Club", venue: "Lakeside Venue", type: "League", status: "Away" }
-  ],
-  players: [
-    { id: id(), name: "Player One", role: "Captain", available: "yes", team: "1" },
-    { id: id(), name: "Player Two", role: "Vice Captain", available: "yes", team: "1" },
-    { id: id(), name: "Player Three", role: "Player", available: "maybe", team: "1" },
-    { id: id(), name: "Player Four", role: "Player", available: "yes", team: "1" },
-    { id: id(), name: "Player Five", role: "Captain", available: "yes", team: "2" },
-    { id: id(), name: "Player Six", role: "Vice Captain", available: "no", team: "2" }
-  ],
+  activePage: "Dashboard",
+  fixtures: [],
+  players: [],
+  team: [],
   tournament: {
-    name: "Club Singles",
-    players: ["Player One", "Player Two", "Player Three", "Player Four", "Player Five", "Player Six"],
+    name: "Tournament",
+    players: [],
     rounds: []
   },
-  results: [
-    { id: id(), date: "2025-06-01", opponent: "Northside Club", score: "4 - 2", result: "Win" },
-    { id: id(), date: "2025-05-25", opponent: "West Park Club", score: "1 - 3", result: "Loss" }
-  ],
+  results: [],
+  leagueTable: [],
+  transport: [],
+  catering: [],
+  contacts: [],
   notice: ""
 };
 
 let state = loadState();
-let isLoggedIn = sessionStorage.getItem("matchSecretaryLoggedIn") === "yes";
+let unlocked = sessionStorage.getItem("clubMatchSecretaryUnlocked") === "yes";
 
-const tabs = [
-  ["Dashboard", "dashboard"],
-  ["Fixtures", "fixtures"],
-  ["Members", "team"],
-  ["Availability", "availability"],
-  ["Team Selection", "list"],
-  ["Tournaments", "trophy"],
-  ["Match Results", "results"],
-  ["Reports", "reports"],
-  ["Club Setup", "setup"]
+const pages = [
+  "Dashboard",
+  "Fixtures",
+  "Members",
+  "Availability",
+  "Team Selection",
+  "Tournaments",
+  "Match Results",
+  "League Table",
+  "Transport",
+  "Catering",
+  "Contacts",
+  "Reports",
+  "Settings"
 ];
 
-function app() {
-  if (!isLoggedIn) {
-    renderLogin();
+function render() {
+  if (!unlocked) {
+    renderPinScreen();
     return;
   }
 
   document.getElementById("app").innerHTML = `
-    <div class="app-shell">
+    <div class="app-shell" style="${themeStyle()}">
       <header class="topbar">
-        <div class="brand-row">
-          <div class="brand">
-            <div class="shield" aria-hidden="true"></div>
-            <div>
-              <h1>${escapeHtml(state.club.name || "Club Match Secretary Manager")}</h1>
-              <p>${escapeHtml(state.club.sport || "Fixtures")} - Teams - Availability - Results - Reports</p>
-            </div>
-          </div>
-          <div class="header-actions">
-            <span class="admin-name">${escapeHtml(state.admin.name)}</span>
-            <button class="logout" data-action="logout">Logout</button>
+        <div class="brand">
+          <div class="logo-mark" aria-hidden="true">CM</div>
+          <div>
+            <h1>Club Match Secretary Manager</h1>
+            <p>${escapeHtml(state.clubName)} - ${escapeHtml(state.clubType)} - fixtures, teams, availability, results and reports</p>
           </div>
         </div>
-        <div class="tabs-wrap">
-          <nav class="tabs" aria-label="Main sections">
-            ${tabs.map(([label, icon]) => `<button class="tab ${state.active === label ? "active" : ""}" data-tab="${label}">${icons[icon]} ${label}</button>`).join("")}
-          </nav>
-        </div>
+        <nav class="tabs" aria-label="App sections">
+          ${pages.map((page) => `<button class="tab ${state.activePage === page ? "active" : ""}" data-page="${page}">${page}</button>`).join("")}
+        </nav>
       </header>
+
       <main class="main">
         ${state.notice ? `<div class="notice">${escapeHtml(state.notice)}</div>` : ""}
         ${renderPage()}
@@ -102,190 +77,137 @@ function app() {
     </div>
   `;
 
-  wireCommonActions();
-  wirePageActions();
+  wireNavigation();
+  wireActions();
 }
 
-function renderLogin() {
+function renderPinScreen() {
   document.getElementById("app").innerHTML = `
-    <main class="login-page">
-      <section class="card login-card">
-        <div class="shield login-shield" aria-hidden="true"></div>
-        <h1>${escapeHtml(state.club.name || "Club Match Secretary Manager")}</h1>
-        <p class="meta">Admin access</p>
-        <div class="field">
-          <label for="login-name">Admin name</label>
-          <input id="login-name" value="${escapeAttr(state.admin.name)}" />
-        </div>
-        <div class="field">
-          <label for="login-password">Password</label>
-          <input id="login-password" type="password" placeholder="Enter password" />
-        </div>
-        <button class="button primary full-button" data-action="login">Login</button>
-        ${state.notice ? `<div class="notice compact">${escapeHtml(state.notice)}</div>` : ""}
+    <main class="pin-screen" style="${themeStyle()}">
+      <section class="card pin-card">
+        <div class="logo-mark pin-logo" aria-hidden="true">CM</div>
+        <h1>Club Match Secretary Manager</h1>
+        <p class="help-text">Enter your PIN to open the app.</p>
+        <label class="field-label">
+          PIN
+          <input id="pin-input" type="password" inputmode="numeric" autocomplete="off" />
+        </label>
+        <button class="button primary" data-pin-login>Open App</button>
+        ${state.notice ? `<div class="notice">${escapeHtml(state.notice)}</div>` : ""}
+        <p class="help-text">Default PIN: 1234. Change it in Settings after opening.</p>
       </section>
     </main>
   `;
 
-  document.querySelector("[data-action='login']").addEventListener("click", login);
-  document.getElementById("login-password").addEventListener("keydown", (event) => {
-    if (event.key === "Enter") login();
+  document.querySelector("[data-pin-login]").addEventListener("click", unlockWithPin);
+  document.getElementById("pin-input").addEventListener("keydown", (event) => {
+    if (event.key === "Enter") unlockWithPin();
   });
-}
-
-function wireCommonActions() {
-  document.querySelectorAll("[data-tab]").forEach((button) => {
-    button.addEventListener("click", () => {
-      state.active = button.dataset.tab;
-      state.notice = "";
-      saveAndRender();
-    });
-  });
-
-  const logout = document.querySelector("[data-action='logout']");
-  logout.addEventListener("click", () => {
-    isLoggedIn = false;
-    sessionStorage.removeItem("matchSecretaryLoggedIn");
-    state.notice = "";
-    app();
-  });
-}
-
-function wirePageActions() {
-  document.querySelectorAll("[data-action]").forEach((element) => {
-    const action = element.dataset.action;
-    if (action === "save-club") element.addEventListener("click", saveClub);
-    if (action === "save-admin") element.addEventListener("click", saveAdmin);
-    if (action === "add-player") element.addEventListener("click", addPlayer);
-    if (action === "update-player") element.addEventListener("click", () => updatePlayer(element.dataset.id));
-    if (action === "remove-player") element.addEventListener("click", () => removePlayer(element.dataset.id));
-    if (action === "add-fixture") element.addEventListener("click", addFixture);
-    if (action === "update-fixture") element.addEventListener("click", () => updateFixture(element.dataset.id));
-    if (action === "remove-fixture") element.addEventListener("click", () => removeFixture(element.dataset.id));
-    if (action === "add-tournament-player") element.addEventListener("click", addTournamentPlayer);
-    if (action === "remove-tournament-player") element.addEventListener("click", () => removeTournamentPlayer(Number(element.dataset.index)));
-    if (action === "rename-tournament-player") element.addEventListener("click", () => renameTournamentPlayer(Number(element.dataset.index)));
-    if (action === "generate-bracket") element.addEventListener("click", generateBracketFromPlayers);
-    if (action === "shuffle-bracket") element.addEventListener("click", shuffleTournament);
-    if (action === "advance-winner") element.addEventListener("click", () => advanceWinner(Number(element.dataset.round), Number(element.dataset.match), element.dataset.name));
-    if (action === "clear-bracket") element.addEventListener("click", clearBracket);
-    if (action === "use-members-for-tournament") element.addEventListener("click", useMembersForTournament);
-  });
-
-  document.querySelectorAll("[data-availability]").forEach((button) => {
-    button.addEventListener("click", () => {
-      const player = state.players.find((item) => item.id === button.dataset.id);
-      if (!player) return;
-      player.available = button.dataset.availability;
-      state.notice = `${player.name} marked as ${player.available}.`;
-      saveAndRender();
-    });
-  });
-
-  const memberImport = document.getElementById("member-import");
-  if (memberImport) memberImport.addEventListener("change", (event) => importCsv(event, importMembers));
-
-  const fixtureImport = document.getElementById("fixture-import");
-  if (fixtureImport) fixtureImport.addEventListener("change", (event) => importCsv(event, importFixtures));
 }
 
 function renderPage() {
-  const pages = {
-    Dashboard: dashboard,
-    Fixtures: fixtures,
-    Members: members,
-    Availability: availability,
-    "Team Selection": teamSelection,
-    Tournaments: tournaments,
-    "Match Results": matchResults,
-    Reports: reports,
-    "Club Setup": clubSetup
+  const pageMap = {
+    Dashboard: renderDashboard,
+    Fixtures: renderFixtures,
+    Members: renderMembers,
+    Availability: renderAvailability,
+    "Team Selection": renderTeamSelection,
+    Tournaments: renderTournaments,
+    "Match Results": renderResults,
+    "League Table": renderLeagueTable,
+    Transport: renderTransport,
+    Catering: renderCatering,
+    Contacts: renderContacts,
+    Reports: renderReports,
+    Settings: renderSettings
   };
-
-  return pages[state.active]();
+  return pageMap[state.activePage]();
 }
 
-function title(name, actions = "") {
-  return `<div class="page-title"><h2>${name}</h2><div class="actions">${actions}</div></div>`;
-}
-
-function dashboard() {
-  const next = state.fixtures.slice().sort((a, b) => `${a.date} ${a.time}`.localeCompare(`${b.date} ${b.time}`))[0];
+function pageTitle(title, actions = "") {
   return `
-    ${title("Dashboard")}
-    ${next ? `
-      <section class="card next-fixture">
-        <div class="eyebrow">Next Fixture</div>
-        <h3>${escapeHtml(next.home)} v ${escapeHtml(next.away)}</h3>
-        <div class="meta">${formatDate(next.date)} at ${escapeHtml(next.time)} - ${escapeHtml(next.venue)} - ${escapeHtml(next.type)}</div>
+    <div class="page-title">
+      <h2>${title}</h2>
+      <div class="actions">${actions}</div>
+    </div>
+  `;
+}
+
+function sectionButtons(sectionId, csvType = "") {
+  return `
+    <button class="button" data-action="print" data-print="${sectionId}">Print</button>
+    <button class="button" data-action="export-pdf" data-print="${sectionId}">Export PDF</button>
+    ${csvType ? `<button class="button" data-action="export-csv" data-csv="${csvType}">Export CSV</button>` : ""}
+  `;
+}
+
+function renderDashboard() {
+  const nextFixture = [...state.fixtures].sort((a, b) => `${a.date}${a.time}`.localeCompare(`${b.date}${b.time}`))[0];
+  return `
+    ${pageTitle("Dashboard", sectionButtons("dashboard-print"))}
+    <section id="dashboard-print">
+      <section class="summary-grid">
+        ${summaryCard("Fixtures", state.fixtures.length)}
+        ${summaryCard("Members", state.players.length)}
+        ${summaryCard("Available", state.players.filter((player) => player.availability === "Available").length)}
+        ${summaryCard("Team Sheet", state.team.length)}
+        ${summaryCard("Tournament Players", state.tournament.players.length)}
+        ${summaryCard("Transport", state.transport.length)}
+        ${summaryCard("Catering", state.catering.length)}
+        ${summaryCard("Contacts", state.contacts.length)}
       </section>
-    ` : `<section class="card empty">Import or add fixtures to show your next match here.</section>`}
-    <section class="grid two">
-      ${stat("fixtures", state.fixtures.length, "Fixtures")}
-      ${stat("team", state.players.length, "Members")}
-      ${stat("availability", state.players.filter((p) => p.available === "yes").length, "Available")}
-      ${stat("trophy", state.tournament.players.length, "Tournament Players")}
+      <section class="card next-card">
+        <span class="eyebrow">Next Fixture</span>
+        ${nextFixture ? `
+          <h3>${escapeHtml(nextFixture.home)} v ${escapeHtml(nextFixture.away)}</h3>
+          <p>${formatDate(nextFixture.date)} at ${escapeHtml(nextFixture.time)} - ${escapeHtml(nextFixture.venue)} - ${escapeHtml(nextFixture.competition)}</p>
+        ` : "<p>No fixtures added yet. Use the Fixtures section to add your first fixture.</p>"}
+      </section>
+      <section class="card panel club-details">
+        <h3>Club Details</h3>
+        <p><strong>Type:</strong> ${escapeHtml(state.clubType)}</p>
+        <p><strong>Venue:</strong> ${escapeHtml(state.clubVenue || "Not added")}</p>
+        <p><strong>Contact:</strong> ${escapeHtml(state.clubContact || "Not added")}</p>
+        <p><strong>Email:</strong> ${escapeHtml(state.clubEmail || "Not added")}</p>
+        <p><strong>Phone:</strong> ${escapeHtml(state.clubPhone || "Not added")}</p>
+      </section>
     </section>
   `;
 }
 
-function stat(icon, value, label) {
-  return `<article class="card stat">${icons[icon]}<strong>${escapeHtml(String(value))}</strong><span>${escapeHtml(label)}</span></article>`;
+function summaryCard(label, value) {
+  return `<article class="card summary-card"><strong>${value}</strong><span>${label}</span></article>`;
 }
 
-function clubSetup() {
+function renderFixtures() {
   return `
-    ${title("Club Setup", `<button class="button primary" data-action="save-club">Save Club Settings</button>`)}
-    <section class="card panel setup-section">
-      <h3>Club Details</h3>
-      <div class="form-grid">
-        ${inputField("club-name", "Club name", state.club.name)}
-        ${inputField("club-sport", "Sport or activity", state.club.sport)}
-        ${inputField("club-venue", "Home venue", state.club.venue)}
-        ${inputField("club-contact", "Primary contact", state.club.contact)}
-        ${inputField("club-email", "Email", state.club.email)}
-        <div class="field">
-          <label for="club-format">Team format</label>
-          <select id="club-format">
-            ${["Rinks / squads", "Singles", "Pairs", "Full team"].map((option) => `<option ${state.club.teamFormat === option ? "selected" : ""}>${option}</option>`).join("")}
-          </select>
-        </div>
-        <div class="field wide">
-          <label for="club-notes">Customer notes</label>
-          <textarea id="club-notes" rows="5">${escapeHtml(state.club.notes)}</textarea>
-        </div>
-      </div>
-    </section>
-    <section class="card panel setup-section">
-      <h3>Admin Login</h3>
-      <div class="form-grid">
-        ${inputField("admin-name", "Admin display name", state.admin.name)}
-        <div class="field">
-          <label for="admin-password">Admin password</label>
-          <input id="admin-password" type="password" value="${escapeAttr(state.admin.password)}" />
-        </div>
-        <div class="field">
-          <label>Note</label>
-          <input value="For stronger security, use a hosted version with a real database login." disabled />
-        </div>
-      </div>
-      <div class="actions setup-actions">
-        <button class="button primary" data-action="save-admin">Save Admin Login</button>
-      </div>
-    </section>
-  `;
-}
-
-function members() {
-  return `
-    ${title("Members", `<label class="button file-button">Import CSV<input id="member-import" type="file" accept=".csv,text/csv" /></label><button class="button primary" data-action="add-player">Add Member</button>`)}
-    <section class="card panel">
-      <p class="meta">CSV columns accepted: name, role, team, available. A simple one-column list of names also works.</p>
+    ${pageTitle("Fixtures", `
+      <button class="button primary" data-action="add-fixture">Add Fixture</button>
+      ${sectionButtons("fixtures-print", "fixtures")}
+    `)}
+    <section class="card panel" id="fixtures-print">
+      <h3>Fixtures</h3>
       <div class="table-wrap">
         <table>
-          <thead><tr><th>Name</th><th>Role</th><th>Team</th><th>Availability</th><th>Actions</th></tr></thead>
+          <thead>
+            <tr><th>Date</th><th>Time</th><th>Home</th><th>Away</th><th>Venue</th><th>Competition</th><th>Status</th><th class="no-print">Actions</th></tr>
+          </thead>
           <tbody>
-            ${state.players.map((player) => memberRow(player)).join("") || `<tr><td colspan="5">No members yet.</td></tr>`}
+            ${state.fixtures.length ? state.fixtures.map((fixture) => `
+              <tr>
+                <td>${formatDate(fixture.date)}</td>
+                <td>${escapeHtml(fixture.time)}</td>
+                <td>${escapeHtml(fixture.home)}</td>
+                <td>${escapeHtml(fixture.away)}</td>
+                <td>${escapeHtml(fixture.venue)}</td>
+                <td>${escapeHtml(fixture.competition)}</td>
+                <td><span class="badge">${escapeHtml(fixture.status)}</span></td>
+                <td class="row-actions no-print">
+                  <button class="small-button" data-action="edit-fixture" data-id="${fixture.id}">Edit Fixture</button>
+                  <button class="small-button danger" data-action="delete-fixture" data-id="${fixture.id}">Delete Fixture</button>
+                </td>
+              </tr>
+            `).join("") : `<tr><td colspan="8" class="empty">No fixtures added yet.</td></tr>`}
           </tbody>
         </table>
       </div>
@@ -293,35 +215,33 @@ function members() {
   `;
 }
 
-function memberRow(player) {
+function renderMembers() {
   return `
-    <tr>
-      <td><input id="player-name-${player.id}" value="${escapeAttr(player.name)}" /></td>
-      <td><input id="player-role-${player.id}" value="${escapeAttr(player.role)}" /></td>
-      <td><input id="player-team-${player.id}" value="${escapeAttr(player.team)}" /></td>
-      <td>
-        <select id="player-available-${player.id}">
-          ${["yes", "maybe", "no"].map((value) => `<option value="${value}" ${player.available === value ? "selected" : ""}>${value}</option>`).join("")}
-        </select>
-      </td>
-      <td class="row-actions">
-        <button class="small-button" data-action="update-player" data-id="${player.id}">Save</button>
-        <button class="small-button danger" data-action="remove-player" data-id="${player.id}">Remove</button>
-      </td>
-    </tr>
-  `;
-}
-
-function fixtures() {
-  return `
-    ${title("Fixtures", `<label class="button file-button">Import CSV<input id="fixture-import" type="file" accept=".csv,text/csv" /></label><button class="button primary" data-action="add-fixture">Add Fixture</button>`)}
-    <section class="card panel">
-      <p class="meta">CSV columns accepted: date, time, home, away, venue, type, status. Dates should be like 2025-06-14.</p>
+    ${pageTitle("Members", `
+      <button class="button primary" data-action="add-player">Add Player</button>
+      ${sectionButtons("members-print", "members")}
+    `)}
+    <section class="card panel" id="members-print">
+      <h3>Members</h3>
       <div class="table-wrap">
         <table>
-          <thead><tr><th>Date</th><th>Time</th><th>Home</th><th>Away</th><th>Venue</th><th>Type</th><th>Status</th><th>Actions</th></tr></thead>
+          <thead>
+            <tr><th>Member</th><th>Role</th><th>Phone</th><th>Email</th><th>Availability</th><th class="no-print">Actions</th></tr>
+          </thead>
           <tbody>
-            ${state.fixtures.map((fixture) => fixtureRow(fixture)).join("") || `<tr><td colspan="8">No fixtures yet.</td></tr>`}
+            ${state.players.length ? state.players.map((player) => `
+              <tr>
+                <td>${escapeHtml(player.name)}</td>
+                <td>${escapeHtml(player.role)}</td>
+                <td>${escapeHtml(player.phone)}</td>
+                <td>${escapeHtml(player.email)}</td>
+                <td><span class="badge ${availabilityClass(player.availability)}">${escapeHtml(player.availability)}</span></td>
+                <td class="row-actions no-print">
+                  <button class="small-button" data-action="edit-player" data-id="${player.id}">Edit Player</button>
+                  <button class="small-button danger" data-action="delete-player" data-id="${player.id}">Delete Player</button>
+                </td>
+              </tr>
+            `).join("") : `<tr><td colspan="6" class="empty">No players added yet.</td></tr>`}
           </tbody>
         </table>
       </div>
@@ -329,100 +249,103 @@ function fixtures() {
   `;
 }
 
-function fixtureRow(fixture) {
+function renderAvailability() {
   return `
-    <tr>
-      <td><input id="fixture-date-${fixture.id}" type="date" value="${escapeAttr(fixture.date)}" /></td>
-      <td><input id="fixture-time-${fixture.id}" type="time" value="${escapeAttr(fixture.time)}" /></td>
-      <td><input id="fixture-home-${fixture.id}" value="${escapeAttr(fixture.home)}" /></td>
-      <td><input id="fixture-away-${fixture.id}" value="${escapeAttr(fixture.away)}" /></td>
-      <td><input id="fixture-venue-${fixture.id}" value="${escapeAttr(fixture.venue)}" /></td>
-      <td><input id="fixture-type-${fixture.id}" value="${escapeAttr(fixture.type)}" /></td>
-      <td><input id="fixture-status-${fixture.id}" value="${escapeAttr(fixture.status)}" /></td>
-      <td class="row-actions">
-        <button class="small-button" data-action="update-fixture" data-id="${fixture.id}">Save</button>
-        <button class="small-button danger" data-action="remove-fixture" data-id="${fixture.id}">Remove</button>
-      </td>
-    </tr>
-  `;
-}
-
-function availability() {
-  return `
-    ${title("Availability")}
-    <section class="card panel">
-      <div class="availability">
-        ${state.players.map((player) => `
-          <div class="availability-row">
-            <strong>${escapeHtml(player.name)}</strong>
-            <button class="choice ${player.available === "yes" ? "selected yes" : ""}" data-availability="yes" data-id="${player.id}">Available</button>
-            <button class="choice ${player.available === "maybe" ? "selected maybe" : ""}" data-availability="maybe" data-id="${player.id}">Maybe</button>
-            <button class="choice ${player.available === "no" ? "selected no" : ""}" data-availability="no" data-id="${player.id}">Unavailable</button>
-          </div>
-        `).join("") || `<div class="empty">Import members first, then record availability here.</div>`}
+    ${pageTitle("Availability", `
+      ${sectionButtons("availability-print", "availability")}
+    `)}
+    <section class="card panel" id="availability-print">
+      <h3>Availability Report</h3>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr><th>Member</th><th>Role</th><th>Availability</th><th class="no-print">Actions</th></tr>
+          </thead>
+          <tbody>
+            ${state.players.length ? state.players.map((player) => `
+              <tr>
+                <td>${escapeHtml(player.name)}</td>
+                <td>${escapeHtml(player.role)}</td>
+                <td><span class="badge ${availabilityClass(player.availability)}">${escapeHtml(player.availability)}</span></td>
+                <td class="row-actions no-print">
+                  <button class="small-button success" data-action="set-availability" data-id="${player.id}" data-value="Available">Mark Available</button>
+                  <button class="small-button warning" data-action="set-availability" data-id="${player.id}" data-value="Unsure">Mark Unsure</button>
+                  <button class="small-button danger" data-action="set-availability" data-id="${player.id}" data-value="Unavailable">Mark Unavailable</button>
+                </td>
+              </tr>
+            `).join("") : `<tr><td colspan="4" class="empty">No members added yet.</td></tr>`}
+          </tbody>
+        </table>
       </div>
     </section>
   `;
 }
 
-function teamSelection() {
-  const teams = [...new Set(state.players.map((player) => player.team || "Unassigned"))].sort();
+function renderTeamSelection() {
   return `
-    ${title("Team Selection")}
-    <section class="grid two">
-      ${teams.map((team) => `
-        <article class="card panel">
-          <h3>Team ${escapeHtml(team)}</h3>
+    ${pageTitle("Team Selection", `
+      <button class="button primary" data-action="add-team-player">Add Player to Team</button>
+      <button class="button danger" data-action="clear-team">Clear Team</button>
+      ${sectionButtons("team-print")}
+    `)}
+    <section class="card panel" id="team-print">
+      <h3>Team Sheet</h3>
+      ${state.team.length ? `
+        <div class="table-wrap">
           <table>
+            <thead><tr><th>Position</th><th>Player</th><th class="no-print">Actions</th></tr></thead>
             <tbody>
-              ${state.players.filter((player) => (player.team || "Unassigned") === team).map((player) => `
+              ${state.team.map((member) => `
                 <tr>
-                  <td><strong>${escapeHtml(player.role || "Player")}</strong></td>
-                  <td>${escapeHtml(player.name)}</td>
-                  <td><span class="badge ${player.available === "no" ? "danger" : player.available === "maybe" ? "warn" : ""}">${escapeHtml(player.available)}</span></td>
+                  <td>${escapeHtml(member.position)}</td>
+                  <td>${escapeHtml(member.playerName)}</td>
+                  <td class="row-actions no-print">
+                    <button class="small-button danger" data-action="remove-team-player" data-id="${member.id}">Remove Player from Team</button>
+                  </td>
                 </tr>
               `).join("")}
             </tbody>
           </table>
-        </article>
-      `).join("") || `<article class="card empty">No teams yet.</article>`}
+        </div>
+      ` : `<p class="empty">No players selected for the team yet.</p>`}
     </section>
   `;
 }
 
-function tournaments() {
+function renderTournaments() {
   return `
-    ${title("Tournaments", `<button class="button" data-action="clear-bracket">Clear Draw</button><button class="button" data-action="shuffle-bracket">Shuffle Draw</button><button class="button primary" data-action="generate-bracket">Generate Bracket</button>`)}
-    <section class="grid two tournament-layout">
+    ${pageTitle("Tournaments", `
+      <button class="button primary" data-action="add-tournament-player">Add Tournament Player</button>
+      <button class="button" data-action="use-players-for-tournament">Use Player List</button>
+      <button class="button" data-action="shuffle-tournament">Shuffle Draw</button>
+      <button class="button primary" data-action="generate-tournament">Generate Bracket</button>
+      <button class="button danger" data-action="clear-tournament">Clear Bracket</button>
+      ${sectionButtons("tournament-print")}
+    `)}
+    <section class="tournament-grid">
       <article class="card panel">
-        <div class="field">
-          <label for="tournament-name">Tournament name</label>
-          <input id="tournament-name" value="${escapeAttr(state.tournament.name)}" />
-        </div>
-        <div class="field inline-field">
-          <label for="tournament-player">Add player</label>
-          <div class="inline-controls">
-            <input id="tournament-player" placeholder="Player name" />
-            <button class="button primary" data-action="add-tournament-player">Add</button>
-          </div>
-        </div>
-        <div class="player-chips">
-          ${state.tournament.players.map((name, index) => `
+        <h3>Tournament Setup</h3>
+        <label class="field-label">
+          Tournament name
+          <input id="tournament-name-input" value="${escapeAttr(state.tournament.name)}" />
+        </label>
+        <div class="chips">
+          ${state.tournament.players.map((player, index) => `
             <span class="chip">
-              <input id="tournament-player-${index}" value="${escapeAttr(name)}" />
-              <button title="Rename" data-action="rename-tournament-player" data-index="${index}">Save</button>
-              <button title="Remove" data-action="remove-tournament-player" data-index="${index}">x</button>
+              <input id="tournament-player-${index}" value="${escapeAttr(player)}" />
+              <button data-action="edit-tournament-player" data-index="${index}">Edit Player</button>
+              <button data-action="delete-tournament-player" data-index="${index}">Delete Player</button>
             </span>
-          `).join("") || `<p class="meta">Add as many players as you need, then generate the bracket.</p>`}
+          `).join("")}
         </div>
       </article>
       <article class="card panel">
-        <h3>Import from members</h3>
-        <p class="meta">Use the current member list as tournament entrants.</p>
-        <button class="button" data-action="use-members-for-tournament">Use All Members</button>
+        <h3>How to use</h3>
+        <p class="help-text">Add any number of players, generate a knockout bracket, then click a player name in a match to advance them.</p>
       </article>
     </section>
-    <section class="card panel bracket-scroll">
+    <section class="card panel bracket-card" id="tournament-print">
+      <h3>${escapeHtml(state.tournament.name)}</h3>
       ${renderBracket()}
     </section>
   `;
@@ -430,18 +353,18 @@ function tournaments() {
 
 function renderBracket() {
   if (!state.tournament.rounds.length) {
-    return `<div class="empty">No draw yet. Add players, then choose Generate Bracket.</div>`;
+    return `<p class="empty">No bracket generated yet.</p>`;
   }
 
   return `
     <div class="bracket">
       ${state.tournament.rounds.map((round, roundIndex) => `
         <div class="round">
-          <h3>${escapeHtml(round.name)}</h3>
+          <h4>${escapeHtml(round.name)}</h4>
           ${round.matches.map((match, matchIndex) => `
             <div class="match">
-              ${seedButton(match.a, match.winner, roundIndex, matchIndex)}
-              ${seedButton(match.b, match.winner, roundIndex, matchIndex)}
+              ${renderSeed(match.a, match.winner, roundIndex, matchIndex)}
+              ${renderSeed(match.b, match.winner, roundIndex, matchIndex)}
             </div>
           `).join("")}
         </div>
@@ -450,409 +373,894 @@ function renderBracket() {
   `;
 }
 
-function seedButton(name, winner, roundIndex, matchIndex) {
-  const isBye = !name || name === "Bye";
+function renderSeed(name, winner, roundIndex, matchIndex) {
+  const disabled = !name || name === "Bye";
   return `
-    <button class="seed ${winner === name ? "winner" : ""}" ${isBye ? "disabled" : ""} data-action="advance-winner" data-round="${roundIndex}" data-match="${matchIndex}" data-name="${escapeAttr(name || "")}">
+    <button
+      class="seed ${winner === name ? "winner" : ""}"
+      ${disabled ? "disabled" : ""}
+      data-action="advance-tournament-player"
+      data-round="${roundIndex}"
+      data-match="${matchIndex}"
+      data-name="${escapeAttr(name || "")}"
+    >
       <span>${escapeHtml(name || "TBD")}</span>
-      <span>${winner === name ? "W" : ""}</span>
+      <span>${winner === name ? "Winner" : ""}</span>
     </button>
   `;
 }
 
-function matchResults() {
+function renderResults() {
   return `
-    ${title("Match Results")}
-    <section class="card table-wrap">
-      <table>
-        <thead><tr><th>Date</th><th>Opponent</th><th>Score</th><th>Result</th></tr></thead>
-        <tbody>
-          ${state.results.map((result) => `
-            <tr>
-              <td>${formatDate(result.date)}</td>
-              <td>${escapeHtml(result.opponent)}</td>
-              <td><strong>${escapeHtml(result.score)}</strong></td>
-              <td><span class="badge ${result.result === "Loss" ? "danger" : result.result === "Draw" ? "warn" : ""}">${escapeHtml(result.result)}</span></td>
-            </tr>
-          `).join("")}
-        </tbody>
-      </table>
+    ${pageTitle("Match Results", `
+      <button class="button primary" data-action="add-result">Add Result</button>
+      ${sectionButtons("results-print", "results")}
+    `)}
+    <section class="card panel" id="results-print">
+      <h3>Results</h3>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Date</th><th>Opponent</th><th>Competition</th><th>Score</th><th>Outcome</th><th class="no-print">Actions</th></tr></thead>
+          <tbody>
+            ${state.results.length ? state.results.map((result) => `
+              <tr>
+                <td>${formatDate(result.date)}</td>
+                <td>${escapeHtml(result.opponent)}</td>
+                <td>${escapeHtml(result.competition)}</td>
+                <td>${escapeHtml(result.scoreFor)} - ${escapeHtml(result.scoreAgainst)}</td>
+                <td><span class="badge ${result.outcome === "Win" ? "success-badge" : result.outcome === "Loss" ? "danger-badge" : "warning-badge"}">${escapeHtml(result.outcome)}</span></td>
+                <td class="row-actions no-print">
+                  <button class="small-button" data-action="edit-result" data-id="${result.id}">Edit Result</button>
+                  <button class="small-button danger" data-action="delete-result" data-id="${result.id}">Delete Result</button>
+                </td>
+              </tr>
+            `).join("") : `<tr><td colspan="6" class="empty">No results added yet.</td></tr>`}
+          </tbody>
+        </table>
+      </div>
     </section>
   `;
 }
 
-function reports() {
-  const played = state.results.length || 1;
-  const wins = state.results.filter((item) => item.result === "Win").length;
-  const replies = state.players.filter((item) => item.available !== "maybe").length;
+function renderLeagueTable() {
   return `
-    ${title("Reports")}
+    ${pageTitle("League Table", `
+      <button class="button primary" data-action="add-league-team">Add Team</button>
+      ${sectionButtons("league-print", "league")}
+    `)}
+    <section class="card panel" id="league-print">
+      <h3>League Table</h3>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Team</th><th>Played</th><th>Won</th><th>Drawn</th><th>Lost</th><th>Points</th><th class="no-print">Actions</th></tr></thead>
+          <tbody>
+            ${state.leagueTable.length ? state.leagueTable.map((team) => `
+              <tr>
+                <td>${escapeHtml(team.team)}</td>
+                <td>${team.played}</td>
+                <td>${team.won}</td>
+                <td>${team.drawn}</td>
+                <td>${team.lost}</td>
+                <td><strong>${team.points}</strong></td>
+                <td class="row-actions no-print">
+                  <button class="small-button" data-action="edit-league-team" data-id="${team.id}">Edit Team</button>
+                  <button class="small-button danger" data-action="delete-league-team" data-id="${team.id}">Delete Team</button>
+                </td>
+              </tr>
+            `).join("") : `<tr><td colspan="7" class="empty">No league teams added yet.</td></tr>`}
+          </tbody>
+        </table>
+      </div>
+    </section>
+  `;
+}
+
+function renderTransport() {
+  return `
+    ${pageTitle("Transport", `
+      <button class="button primary" data-action="add-transport">Add Transport</button>
+      ${sectionButtons("transport-print")}
+    `)}
+    <section class="card panel" id="transport-print">
+      <h3>Transport</h3>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Date</th><th>Fixture</th><th>Driver</th><th>Seats</th><th>Notes</th><th class="no-print">Actions</th></tr></thead>
+          <tbody>
+            ${state.transport.length ? state.transport.map((item) => `
+              <tr>
+                <td>${formatDate(item.date)}</td>
+                <td>${escapeHtml(item.fixture)}</td>
+                <td>${escapeHtml(item.driver)}</td>
+                <td>${escapeHtml(item.seats)}</td>
+                <td>${escapeHtml(item.notes)}</td>
+                <td class="row-actions no-print">
+                  <button class="small-button" data-action="edit-transport" data-id="${item.id}">Edit Transport</button>
+                  <button class="small-button danger" data-action="delete-transport" data-id="${item.id}">Delete Transport</button>
+                </td>
+              </tr>
+            `).join("") : `<tr><td colspan="6" class="empty">No transport added yet.</td></tr>`}
+          </tbody>
+        </table>
+      </div>
+    </section>
+  `;
+}
+
+function renderCatering() {
+  return `
+    ${pageTitle("Catering", `
+      <button class="button primary" data-action="add-catering">Add Catering</button>
+      ${sectionButtons("catering-print")}
+    `)}
+    <section class="card panel" id="catering-print">
+      <h3>Catering</h3>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Date</th><th>Fixture / Event</th><th>Required</th><th>Responsible</th><th>Notes</th><th class="no-print">Actions</th></tr></thead>
+          <tbody>
+            ${state.catering.length ? state.catering.map((item) => `
+              <tr>
+                <td>${formatDate(item.date)}</td>
+                <td>${escapeHtml(item.event)}</td>
+                <td>${escapeHtml(item.required)}</td>
+                <td>${escapeHtml(item.responsible)}</td>
+                <td>${escapeHtml(item.notes)}</td>
+                <td class="row-actions no-print">
+                  <button class="small-button" data-action="edit-catering" data-id="${item.id}">Edit Catering</button>
+                  <button class="small-button danger" data-action="delete-catering" data-id="${item.id}">Delete Catering</button>
+                </td>
+              </tr>
+            `).join("") : `<tr><td colspan="6" class="empty">No catering added yet.</td></tr>`}
+          </tbody>
+        </table>
+      </div>
+    </section>
+  `;
+}
+
+function renderContacts() {
+  return `
+    ${pageTitle("Contacts", `
+      <button class="button primary" data-action="add-contact">Add Contact</button>
+      ${sectionButtons("contacts-print")}
+    `)}
+    <section class="card panel" id="contacts-print">
+      <h3>Contacts</h3>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Name</th><th>Club / Organisation</th><th>Role</th><th>Phone</th><th>Email</th><th class="no-print">Actions</th></tr></thead>
+          <tbody>
+            ${state.contacts.length ? state.contacts.map((item) => `
+              <tr>
+                <td>${escapeHtml(item.name)}</td>
+                <td>${escapeHtml(item.club)}</td>
+                <td>${escapeHtml(item.role)}</td>
+                <td>${escapeHtml(item.phone)}</td>
+                <td>${escapeHtml(item.email)}</td>
+                <td class="row-actions no-print">
+                  <button class="small-button" data-action="edit-contact" data-id="${item.id}">Edit Contact</button>
+                  <button class="small-button danger" data-action="delete-contact" data-id="${item.id}">Delete Contact</button>
+                </td>
+              </tr>
+            `).join("") : `<tr><td colspan="6" class="empty">No contacts added yet.</td></tr>`}
+          </tbody>
+        </table>
+      </div>
+    </section>
+  `;
+}
+
+function renderReports() {
+  return `
+    ${pageTitle("Reports", sectionButtons("reports-print"))}
     <section class="report-grid">
       <article class="card panel">
-        <h3>Season Summary</h3>
-        ${reportRow("Wins", Math.round((wins / played) * 100))}
-        ${reportRow("Availability replies", state.players.length ? Math.round((replies / state.players.length) * 100) : 0)}
-        ${reportRow("Fixtures listed", Math.min(state.fixtures.length * 10, 100))}
+        <h3>Print Reports</h3>
+        <div class="report-buttons">
+          <button class="button" data-action="print" data-print="team-print-source">Printable Team Sheet</button>
+          <button class="button" data-action="print" data-print="fixtures-print-source">Fixture List</button>
+          <button class="button" data-action="print" data-print="members-print-source">Member List</button>
+          <button class="button" data-action="print" data-print="availability-print-source">Availability Report</button>
+          <button class="button" data-action="print" data-print="results-print-source">Results Summary</button>
+          <button class="button" data-action="print" data-print="league-print-source">League Table Report</button>
+          <button class="button" data-action="print" data-print="tournament-print-source">Tournament Draw Report</button>
+        </div>
       </article>
       <article class="card panel">
-        <h3>Quick Notes</h3>
-        <p class="meta">${state.players.filter((item) => item.available === "maybe").length} members are still marked maybe. ${state.fixtures.length} fixtures are currently saved.</p>
+        <h3>Summary</h3>
+        <p>${state.fixtures.length} fixtures, ${state.players.length} players, ${state.tournament.players.length} tournament players, ${state.results.length} results and ${state.leagueTable.length} league teams saved.</p>
       </article>
+    </section>
+    <div id="reports-print">
+      ${printBlock("Printable Team Sheet", renderTeamPrintRows())}
+      ${printBlock("Fixture List", renderFixturePrintRows())}
+      ${printBlock("Member List", renderMemberPrintRows())}
+      ${printBlock("Availability Report", renderAvailabilityPrintRows())}
+      ${printBlock("Results Summary", renderResultPrintRows())}
+      ${printBlock("League Table Report", renderLeaguePrintRows())}
+      ${printBlock("Tournament Draw Report", renderBracket())}
+    </div>
+    <div class="print-sources">
+      <section id="team-print-source">${printBlock("Team Sheet", renderTeamPrintRows())}</section>
+      <section id="fixtures-print-source">${printBlock("Fixtures", renderFixturePrintRows())}</section>
+      <section id="members-print-source">${printBlock("Member List", renderMemberPrintRows())}</section>
+      <section id="availability-print-source">${printBlock("Availability", renderAvailabilityPrintRows())}</section>
+      <section id="results-print-source">${printBlock("Results", renderResultPrintRows())}</section>
+      <section id="league-print-source">${printBlock("League Table", renderLeaguePrintRows())}</section>
+      <section id="tournament-print-source">${printBlock(state.tournament.name, renderBracket())}</section>
+    </div>
+  `;
+}
+
+function printBlock(title, content) {
+  return `<div class="card panel"><h3>${title}</h3>${content}</div>`;
+}
+
+function renderSettings() {
+  return `
+    ${pageTitle("Settings", `<button class="button primary" data-action="save-settings">Save Settings</button>`)}
+    <section class="card panel settings-panel">
+      <h3>Club Details</h3>
+      <div class="settings-grid">
+        <label>
+          Club name
+          <input id="setting-club-name" value="${escapeAttr(state.clubName)}" />
+        </label>
+        <label>
+          Type of club
+          <input id="setting-club-type" value="${escapeAttr(state.clubType)}" placeholder="Bowling Club, Sports Club, Tennis Club..." />
+        </label>
+        <label>
+          Venue / home ground
+          <input id="setting-club-venue" value="${escapeAttr(state.clubVenue)}" />
+        </label>
+        <label>
+          Contact name
+          <input id="setting-club-contact" value="${escapeAttr(state.clubContact)}" />
+        </label>
+        <label>
+          Contact email
+          <input id="setting-club-email" value="${escapeAttr(state.clubEmail)}" />
+        </label>
+        <label>
+          Contact phone
+          <input id="setting-club-phone" value="${escapeAttr(state.clubPhone)}" />
+        </label>
+      </div>
+      <h3>Colours</h3>
+      <div class="settings-grid colour-grid">
+        <label>
+          Header colour
+          <input id="setting-colour-header" type="color" value="${escapeAttr(state.colours.header)}" />
+        </label>
+        <label>
+          Section accent colour
+          <input id="setting-colour-section" type="color" value="${escapeAttr(state.colours.section)}" />
+        </label>
+        <label>
+          Main button colour
+          <input id="setting-colour-button" type="color" value="${escapeAttr(state.colours.button)}" />
+        </label>
+      </div>
+      <h3>PIN</h3>
+      <div class="settings-grid">
+        <label>
+          Change PIN
+          <input id="setting-pin" type="password" inputmode="numeric" value="${escapeAttr(state.pin)}" />
+        </label>
+      </div>
+      <p class="help-text">This is a standalone product template. All customer data saves only in this browser using localStorage.</p>
     </section>
   `;
 }
 
-function saveClub() {
-  state.club = {
-    name: value("club-name"),
-    sport: value("club-sport"),
-    venue: value("club-venue"),
-    contact: value("club-contact"),
-    email: value("club-email"),
-    teamFormat: value("club-format"),
-    notes: value("club-notes")
-  };
-  state.notice = "Club settings saved.";
-  saveAndRender();
+function wireNavigation() {
+  document.querySelectorAll("[data-page]").forEach((button) => {
+    button.addEventListener("click", () => {
+      state.activePage = button.dataset.page;
+      state.notice = "";
+      saveAndRender();
+    });
+  });
 }
 
-function saveAdmin() {
-  state.admin = {
-    name: value("admin-name") || "Club Admin",
-    password: value("admin-password") || "admin123"
-  };
-  state.notice = "Admin login saved.";
-  saveAndRender();
+function wireActions() {
+  document.querySelectorAll("[data-action]").forEach((button) => {
+    button.addEventListener("click", () => handleAction(button));
+  });
 }
 
-function login() {
-  const name = value("login-name");
-  const password = value("login-password");
-  if (name === state.admin.name && password === state.admin.password) {
-    isLoggedIn = true;
-    sessionStorage.setItem("matchSecretaryLoggedIn", "yes");
+function unlockWithPin() {
+  const enteredPin = valueFromInput("pin-input");
+  if (enteredPin === state.pin) {
+    unlocked = true;
+    sessionStorage.setItem("clubMatchSecretaryUnlocked", "yes");
     state.notice = "";
-    app();
+    render();
     return;
   }
-  state.notice = "Admin name or password is incorrect.";
-  renderLogin();
+  state.notice = "Incorrect PIN.";
+  renderPinScreen();
 }
 
-function addPlayer() {
-  state.players.push({ id: id(), name: "New Member", role: "Player", available: "maybe", team: "1" });
-  state.notice = "Member added.";
-  saveAndRender();
-}
+function handleAction(button) {
+  const action = button.dataset.action;
+  const id = button.dataset.id;
 
-function updatePlayer(playerId) {
-  const player = state.players.find((item) => item.id === playerId);
-  if (!player) return;
-  player.name = value(`player-name-${playerId}`);
-  player.role = value(`player-role-${playerId}`);
-  player.team = value(`player-team-${playerId}`);
-  player.available = value(`player-available-${playerId}`);
-  state.notice = "Member saved.";
-  saveAndRender();
-}
+  if (action === "print") printElement(button.dataset.print);
+  if (action === "export-pdf") printElement(button.dataset.print);
+  if (action === "export-csv") exportCsv(button.dataset.csv);
+  if (action === "save-settings") saveSettings();
 
-function removePlayer(playerId) {
-  state.players = state.players.filter((item) => item.id !== playerId);
-  state.notice = "Member removed.";
-  saveAndRender();
+  if (action === "add-fixture") addFixture();
+  if (action === "edit-fixture") editFixture(id);
+  if (action === "delete-fixture") deleteItem("fixtures", id, "Fixture deleted.");
+
+  if (action === "add-player") addPlayer();
+  if (action === "edit-player") editPlayer(id);
+  if (action === "delete-player") deletePlayer(id);
+  if (action === "set-availability") setAvailability(id, button.dataset.value);
+
+  if (action === "add-team-player") addTeamPlayer();
+  if (action === "remove-team-player") deleteItem("team", id, "Player removed from team.");
+  if (action === "clear-team") clearTeam();
+
+  if (action === "add-tournament-player") addTournamentPlayer();
+  if (action === "edit-tournament-player") editTournamentPlayer(Number(button.dataset.index));
+  if (action === "delete-tournament-player") deleteTournamentPlayer(Number(button.dataset.index));
+  if (action === "use-players-for-tournament") usePlayersForTournament();
+  if (action === "shuffle-tournament") shuffleTournament();
+  if (action === "generate-tournament") generateTournament();
+  if (action === "clear-tournament") clearTournament();
+  if (action === "advance-tournament-player") advanceTournamentPlayer(Number(button.dataset.round), Number(button.dataset.match), button.dataset.name);
+
+  if (action === "add-result") addResult();
+  if (action === "edit-result") editResult(id);
+  if (action === "delete-result") deleteItem("results", id, "Result deleted.");
+
+  if (action === "add-league-team") addLeagueTeam();
+  if (action === "edit-league-team") editLeagueTeam(id);
+  if (action === "delete-league-team") deleteItem("leagueTable", id, "League team deleted.");
+
+  if (action === "add-transport") addTransport();
+  if (action === "edit-transport") editTransport(id);
+  if (action === "delete-transport") deleteItem("transport", id, "Transport deleted.");
+
+  if (action === "add-catering") addCatering();
+  if (action === "edit-catering") editCatering(id);
+  if (action === "delete-catering") deleteItem("catering", id, "Catering deleted.");
+
+  if (action === "add-contact") addContact();
+  if (action === "edit-contact") editContact(id);
+  if (action === "delete-contact") deleteItem("contacts", id, "Contact deleted.");
 }
 
 function addFixture() {
-  state.fixtures.push({ id: id(), date: today(), time: "14:00", home: state.club.name, away: "Opponent Club", venue: state.club.venue, type: "League", status: "Draft" });
+  const fixture = fixturePrompt();
+  if (!fixture) return;
+  state.fixtures.push({ id: createId(), ...fixture });
   state.notice = "Fixture added.";
   saveAndRender();
 }
 
-function updateFixture(fixtureId) {
-  const fixture = state.fixtures.find((item) => item.id === fixtureId);
-  if (!fixture) return;
-  fixture.date = value(`fixture-date-${fixtureId}`);
-  fixture.time = value(`fixture-time-${fixtureId}`);
-  fixture.home = value(`fixture-home-${fixtureId}`);
-  fixture.away = value(`fixture-away-${fixtureId}`);
-  fixture.venue = value(`fixture-venue-${fixtureId}`);
-  fixture.type = value(`fixture-type-${fixtureId}`);
-  fixture.status = value(`fixture-status-${fixtureId}`);
-  state.notice = "Fixture saved.";
+function editFixture(id) {
+  const fixture = findById(state.fixtures, id);
+  const updated = fixturePrompt(fixture);
+  if (!updated) return;
+  Object.assign(fixture, updated);
+  state.notice = "Fixture edited.";
   saveAndRender();
 }
 
-function removeFixture(fixtureId) {
-  state.fixtures = state.fixtures.filter((item) => item.id !== fixtureId);
-  state.notice = "Fixture removed.";
+function fixturePrompt(existing = {}) {
+  const date = prompt("Fixture date (YYYY-MM-DD)", existing.date || today());
+  if (date === null) return null;
+  const time = prompt("Fixture time", existing.time || "14:00");
+  if (time === null) return null;
+  const home = prompt("Home team", existing.home || state.clubName);
+  if (home === null) return null;
+  const away = prompt("Away team", existing.away || "");
+  if (away === null) return null;
+  const venue = prompt("Venue", existing.venue || state.clubVenue);
+  if (venue === null) return null;
+  const competition = prompt("Competition", existing.competition || "");
+  if (competition === null) return null;
+  const status = prompt("Status", existing.status || "Confirmed");
+  if (status === null) return null;
+  return { date, time, home, away, venue, competition, status };
+}
+
+function addPlayer() {
+  const player = playerPrompt();
+  if (!player) return;
+  state.players.push({ id: createId(), ...player });
+  state.notice = "Player added.";
+  saveAndRender();
+}
+
+function editPlayer(id) {
+  const player = findById(state.players, id);
+  const updated = playerPrompt(player);
+  if (!updated) return;
+  Object.assign(player, updated);
+  state.team.forEach((teamPlayer) => {
+    if (teamPlayer.playerName === player.name) teamPlayer.playerName = updated.name;
+  });
+  state.notice = "Player edited.";
+  saveAndRender();
+}
+
+function playerPrompt(existing = {}) {
+  const name = prompt("Player name", existing.name || "");
+  if (name === null) return null;
+  const role = prompt("Role / position", existing.role || "Player");
+  if (role === null) return null;
+  const phone = prompt("Phone", existing.phone || "");
+  if (phone === null) return null;
+  const email = prompt("Email", existing.email || "");
+  if (email === null) return null;
+  const availability = prompt("Availability: Available, Unavailable or Unsure", existing.availability || "Unsure");
+  if (availability === null) return null;
+  return { name, role, phone, email, availability: normaliseAvailability(availability) };
+}
+
+function deletePlayer(id) {
+  const player = findById(state.players, id);
+  state.players = state.players.filter((item) => item.id !== id);
+  state.team = state.team.filter((item) => item.playerName !== player.name);
+  state.notice = "Player deleted.";
+  saveAndRender();
+}
+
+function setAvailability(id, availability) {
+  const player = findById(state.players, id);
+  player.availability = availability;
+  state.notice = `${player.name} marked ${availability}.`;
+  saveAndRender();
+}
+
+function addTeamPlayer() {
+  const playerNames = state.players.map((player) => player.name).join(", ");
+  const playerName = prompt(`Add player to team. Available players: ${playerNames || "none added yet"}`, state.players[0]?.name || "");
+  if (playerName === null) return;
+  const position = prompt("Team position / rink / role", "Player");
+  if (position === null) return;
+  state.team.push({ id: createId(), playerName, position });
+  state.notice = "Player added to team.";
+  saveAndRender();
+}
+
+function clearTeam() {
+  if (!confirm("Clear the whole team sheet?")) return;
+  state.team = [];
+  state.notice = "Team cleared.";
   saveAndRender();
 }
 
 function addTournamentPlayer() {
-  state.tournament.name = value("tournament-name");
-  const name = value("tournament-player");
-  if (!name) return;
-  state.tournament.players.push(name);
+  saveTournamentName();
+  const name = prompt("Tournament player name", "");
+  if (name === null || !name.trim()) return;
+  state.tournament.players.push(name.trim());
+  state.tournament.rounds = [];
   state.notice = "Tournament player added.";
   saveAndRender();
 }
 
-function renameTournamentPlayer(index) {
-  state.tournament.name = value("tournament-name");
-  state.tournament.players[index] = value(`tournament-player-${index}`);
-  state.notice = "Tournament player renamed.";
+function editTournamentPlayer(index) {
+  saveTournamentName();
+  const currentName = state.tournament.players[index];
+  const name = prompt("Edit tournament player", currentName);
+  if (name === null || !name.trim()) return;
+  state.tournament.players[index] = name.trim();
+  state.tournament.rounds = [];
+  state.notice = "Tournament player edited. Generate the bracket again when ready.";
   saveAndRender();
 }
 
-function removeTournamentPlayer(index) {
+function deleteTournamentPlayer(index) {
+  if (!confirm("Delete this tournament player?")) return;
   state.tournament.players.splice(index, 1);
   state.tournament.rounds = [];
-  state.notice = "Tournament player removed. Generate the bracket again when ready.";
+  state.notice = "Tournament player deleted.";
   saveAndRender();
 }
 
-function useMembersForTournament() {
+function usePlayersForTournament() {
+  saveTournamentName();
   state.tournament.players = state.players.map((player) => player.name).filter(Boolean);
   state.tournament.rounds = [];
-  state.notice = "Members copied into tournament players.";
+  state.notice = "Player list copied into tournament.";
   saveAndRender();
 }
 
 function shuffleTournament() {
-  state.tournament.name = value("tournament-name") || state.tournament.name;
+  saveTournamentName();
   state.tournament.players = shuffle([...state.tournament.players]);
-  generateBracketFromPlayers();
-}
-
-function clearBracket() {
   state.tournament.rounds = [];
-  state.notice = "Tournament draw cleared.";
+  state.notice = "Tournament players shuffled. Generate the bracket when ready.";
   saveAndRender();
 }
 
-function generateBracketFromPlayers() {
-  state.tournament.name = value("tournament-name") || state.tournament.name;
-  const players = state.tournament.players.map((name) => name.trim()).filter(Boolean);
-  const size = nextPowerOfTwo(Math.max(players.length, 2));
+function generateTournament() {
+  saveTournamentName();
+  const players = state.tournament.players.map((player) => player.trim()).filter(Boolean);
+  if (players.length < 2) {
+    alert("Add at least two tournament players first.");
+    return;
+  }
+
+  const size = nextPowerOfTwo(players.length);
   const seeded = [...players, ...Array(size - players.length).fill("Bye")];
   const roundCount = Math.log2(size);
-  const rounds = [];
 
-  for (let round = 0; round < roundCount; round += 1) {
-    const matchCount = size / Math.pow(2, round + 1);
-    rounds.push({
-      name: roundName(round, roundCount),
-      matches: Array.from({ length: matchCount }, (_, index) => {
-        if (round === 0) {
-          const a = seeded[index * 2] || "Bye";
-          const b = seeded[index * 2 + 1] || "Bye";
+  state.tournament.rounds = Array.from({ length: roundCount }, (_, roundIndex) => {
+    const matchCount = size / Math.pow(2, roundIndex + 1);
+    return {
+      name: tournamentRoundName(roundIndex, roundCount),
+      matches: Array.from({ length: matchCount }, (_, matchIndex) => {
+        if (roundIndex === 0) {
+          const a = seeded[matchIndex * 2];
+          const b = seeded[matchIndex * 2 + 1];
           return { a, b, winner: a === "Bye" ? b : b === "Bye" ? a : "" };
         }
         return { a: "", b: "", winner: "" };
       })
-    });
-  }
+    };
+  });
 
-  state.tournament.rounds = rounds;
-  advanceByes();
-  state.notice = `Bracket generated for ${players.length} players.`;
+  advanceTournamentByes();
+  state.notice = "Tournament bracket generated.";
   saveAndRender();
 }
 
-function advanceWinner(roundIndex, matchIndex, winner) {
+function clearTournament() {
+  if (!confirm("Clear the tournament bracket? Players will stay in the tournament list.")) return;
+  state.tournament.rounds = [];
+  state.notice = "Tournament bracket cleared.";
+  saveAndRender();
+}
+
+function advanceTournamentPlayer(roundIndex, matchIndex, winner) {
   if (!winner) return;
-  const match = state.tournament.rounds[roundIndex].matches[matchIndex];
+  const match = state.tournament.rounds[roundIndex]?.matches[matchIndex];
+  if (!match) return;
   match.winner = winner;
-  clearFutureWinners(roundIndex, matchIndex);
-  placeWinnerInNextRound(roundIndex, matchIndex, winner);
-  advanceByes();
+  placeTournamentWinner(roundIndex, matchIndex, winner);
+  clearLaterTournamentWinners(roundIndex + 1, Math.floor(matchIndex / 2));
+  advanceTournamentByes();
   state.notice = `${winner} advanced.`;
   saveAndRender();
 }
 
-function placeWinnerInNextRound(roundIndex, matchIndex, winner) {
+function placeTournamentWinner(roundIndex, matchIndex, winner) {
   const nextRound = state.tournament.rounds[roundIndex + 1];
   if (!nextRound) return;
   const nextMatch = nextRound.matches[Math.floor(matchIndex / 2)];
   if (matchIndex % 2 === 0) nextMatch.a = winner;
   else nextMatch.b = winner;
+  nextMatch.winner = "";
 }
 
-function clearFutureWinners(roundIndex, matchIndex) {
-  for (let round = roundIndex + 1; round < state.tournament.rounds.length; round += 1) {
-    const affected = Math.floor(matchIndex / Math.pow(2, round - roundIndex));
-    const match = state.tournament.rounds[round].matches[affected];
+function clearLaterTournamentWinners(roundIndex, matchIndex) {
+  for (let index = roundIndex; index < state.tournament.rounds.length; index += 1) {
+    const match = state.tournament.rounds[index].matches[matchIndex];
     if (match) match.winner = "";
+    matchIndex = Math.floor(matchIndex / 2);
   }
 }
 
-function advanceByes() {
+function advanceTournamentByes() {
   state.tournament.rounds.forEach((round, roundIndex) => {
     round.matches.forEach((match, matchIndex) => {
       if (!match.winner && match.a && (!match.b || match.b === "Bye")) {
         match.winner = match.a;
-        placeWinnerInNextRound(roundIndex, matchIndex, match.a);
+        placeTournamentWinner(roundIndex, matchIndex, match.a);
       }
       if (!match.winner && match.b && (!match.a || match.a === "Bye")) {
         match.winner = match.b;
-        placeWinnerInNextRound(roundIndex, matchIndex, match.b);
+        placeTournamentWinner(roundIndex, matchIndex, match.b);
       }
     });
   });
 }
 
-function importCsv(event, handler) {
-  const file = event.target.files[0];
-  if (!file) return;
-  const reader = new FileReader();
-  reader.onload = () => handler(parseCsv(String(reader.result || "")));
-  reader.readAsText(file);
+function saveTournamentName() {
+  const input = document.getElementById("tournament-name-input");
+  if (input) state.tournament.name = input.value.trim() || "Example Tournament";
 }
 
-function importMembers(rows) {
-  state.players = rows.map((row) => ({
-    id: id(),
-    name: row.name || row.member || row.player || row[0] || "Unnamed Member",
-    role: row.role || row.position || "Player",
-    team: row.team || row.rink || row.squad || "",
-    available: normalAvailability(row.available || row.availability || "maybe")
-  }));
-  state.notice = `${state.players.length} members imported.`;
+function addResult() {
+  const result = resultPrompt();
+  if (!result) return;
+  state.results.push({ id: createId(), ...result });
+  state.notice = "Result added.";
   saveAndRender();
 }
 
-function importFixtures(rows) {
-  state.fixtures = rows.map((row) => ({
-    id: id(),
-    date: row.date || row[0] || today(),
-    time: row.time || row[1] || "",
-    home: row.home || row[2] || state.club.name,
-    away: row.away || row.opponent || row[3] || "Opponent Club",
-    venue: row.venue || row[4] || state.club.venue,
-    type: row.type || row.competition || row[5] || "Fixture",
-    status: row.status || row[6] || "Draft"
-  }));
-  state.notice = `${state.fixtures.length} fixtures imported.`;
+function editResult(id) {
+  const result = findById(state.results, id);
+  const updated = resultPrompt(result);
+  if (!updated) return;
+  Object.assign(result, updated);
+  state.notice = "Result edited.";
   saveAndRender();
 }
 
-function parseCsv(text) {
-  const rows = [];
-  let current = [];
-  let cell = "";
-  let quoted = false;
-
-  for (let index = 0; index < text.length; index += 1) {
-    const char = text[index];
-    const next = text[index + 1];
-    if (char === '"' && quoted && next === '"') {
-      cell += '"';
-      index += 1;
-    } else if (char === '"') {
-      quoted = !quoted;
-    } else if (char === "," && !quoted) {
-      current.push(cell.trim());
-      cell = "";
-    } else if ((char === "\n" || char === "\r") && !quoted) {
-      if (char === "\r" && next === "\n") index += 1;
-      current.push(cell.trim());
-      if (current.some(Boolean)) rows.push(current);
-      current = [];
-      cell = "";
-    } else {
-      cell += char;
-    }
-  }
-
-  current.push(cell.trim());
-  if (current.some(Boolean)) rows.push(current);
-  if (!rows.length) return [];
-
-  const header = rows[0].map((item) => item.toLowerCase().trim());
-  const hasHeader = header.some((item) => ["name", "member", "player", "date", "home", "away", "opponent"].includes(item));
-  if (!hasHeader) return rows.map((row) => Object.assign([...row], row));
-
-  return rows.slice(1).map((row) => {
-    const item = Object.assign([...row], row);
-    header.forEach((key, index) => {
-      item[key] = row[index] || "";
-    });
-    return item;
-  });
+function resultPrompt(existing = {}) {
+  const date = prompt("Result date (YYYY-MM-DD)", existing.date || today());
+  if (date === null) return null;
+  const opponent = prompt("Opponent", existing.opponent || "");
+  if (opponent === null) return null;
+  const competition = prompt("Competition", existing.competition || "");
+  if (competition === null) return null;
+  const scoreFor = Number(prompt("Score for", existing.scoreFor ?? 0));
+  if (Number.isNaN(scoreFor)) return null;
+  const scoreAgainst = Number(prompt("Score against", existing.scoreAgainst ?? 0));
+  if (Number.isNaN(scoreAgainst)) return null;
+  const outcome = prompt("Outcome: Win, Loss or Draw", existing.outcome || "Win");
+  if (outcome === null) return null;
+  return { date, opponent, competition, scoreFor, scoreAgainst, outcome };
 }
 
-function inputField(idValue, label, currentValue) {
-  return `<div class="field"><label for="${idValue}">${label}</label><input id="${idValue}" value="${escapeAttr(currentValue)}" /></div>`;
+function addLeagueTeam() {
+  const team = leagueTeamPrompt();
+  if (!team) return;
+  state.leagueTable.push({ id: createId(), ...team });
+  state.notice = "League team added.";
+  saveAndRender();
 }
 
-function reportRow(label, value) {
-  return `<p><strong>${escapeHtml(label)}</strong></p><div class="bar"><span style="width:${value}%"></span></div>`;
+function addTransport() {
+  const item = transportPrompt();
+  if (!item) return;
+  state.transport.push({ id: createId(), ...item });
+  state.notice = "Transport added.";
+  saveAndRender();
 }
 
-function loadState() {
-  const saved = localStorage.getItem(storageKey);
-  if (!saved) return normalizeState(structuredClone(starterData));
-  try {
-    return normalizeState({ ...structuredClone(starterData), ...JSON.parse(saved), notice: "" });
-  } catch {
-    return normalizeState(structuredClone(starterData));
-  }
+function editTransport(id) {
+  const item = findById(state.transport, id);
+  const updated = transportPrompt(item);
+  if (!updated) return;
+  Object.assign(item, updated);
+  state.notice = "Transport edited.";
+  saveAndRender();
 }
 
-function normalizeState(data) {
-  data.club = { ...starterData.club, ...(data.club || {}) };
-  data.admin = { ...starterData.admin, ...(data.admin || {}) };
-  data.fixtures = (data.fixtures || []).map((fixture) => ({
-    id: fixture.id || id(),
-    date: fixture.date || today(),
-    time: fixture.time || "",
-    home: fixture.home || data.club.name,
-    away: fixture.away || fixture.opponent || "Opponent Club",
-    venue: fixture.venue || data.club.venue,
-    type: fixture.type || fixture.competition || "Fixture",
-    status: fixture.status || "Draft"
-  }));
-  data.players = (data.players || []).map((player) => ({
-    id: player.id || id(),
-    name: player.name || "Unnamed Member",
-    role: player.role || player.position || "Player",
-    available: normalAvailability(player.available || player.availability || "maybe"),
-    team: player.team || player.rink || player.squad || ""
-  }));
-  data.tournament = {
-    ...starterData.tournament,
-    ...(data.tournament || {}),
-    players: ((data.tournament && data.tournament.players) || []).filter(Boolean),
-    rounds: ((data.tournament && data.tournament.rounds) || []).filter(Boolean)
+function transportPrompt(existing = {}) {
+  const date = prompt("Transport date (YYYY-MM-DD)", existing.date || today());
+  if (date === null) return null;
+  const fixture = prompt("Fixture / event", existing.fixture || "");
+  if (fixture === null) return null;
+  const driver = prompt("Driver / organiser", existing.driver || "");
+  if (driver === null) return null;
+  const seats = prompt("Seats / spaces", existing.seats || "");
+  if (seats === null) return null;
+  const notes = prompt("Notes", existing.notes || "");
+  if (notes === null) return null;
+  return { date, fixture, driver, seats, notes };
+}
+
+function addCatering() {
+  const item = cateringPrompt();
+  if (!item) return;
+  state.catering.push({ id: createId(), ...item });
+  state.notice = "Catering added.";
+  saveAndRender();
+}
+
+function editCatering(id) {
+  const item = findById(state.catering, id);
+  const updated = cateringPrompt(item);
+  if (!updated) return;
+  Object.assign(item, updated);
+  state.notice = "Catering edited.";
+  saveAndRender();
+}
+
+function cateringPrompt(existing = {}) {
+  const date = prompt("Catering date (YYYY-MM-DD)", existing.date || today());
+  if (date === null) return null;
+  const event = prompt("Fixture / event", existing.event || "");
+  if (event === null) return null;
+  const required = prompt("Catering required", existing.required || "");
+  if (required === null) return null;
+  const responsible = prompt("Responsible person", existing.responsible || "");
+  if (responsible === null) return null;
+  const notes = prompt("Notes", existing.notes || "");
+  if (notes === null) return null;
+  return { date, event, required, responsible, notes };
+}
+
+function addContact() {
+  const item = contactPrompt();
+  if (!item) return;
+  state.contacts.push({ id: createId(), ...item });
+  state.notice = "Contact added.";
+  saveAndRender();
+}
+
+function editContact(id) {
+  const item = findById(state.contacts, id);
+  const updated = contactPrompt(item);
+  if (!updated) return;
+  Object.assign(item, updated);
+  state.notice = "Contact edited.";
+  saveAndRender();
+}
+
+function contactPrompt(existing = {}) {
+  const name = prompt("Contact name", existing.name || "");
+  if (name === null) return null;
+  const club = prompt("Club / organisation", existing.club || "");
+  if (club === null) return null;
+  const role = prompt("Role", existing.role || "");
+  if (role === null) return null;
+  const phone = prompt("Phone", existing.phone || "");
+  if (phone === null) return null;
+  const email = prompt("Email", existing.email || "");
+  if (email === null) return null;
+  return { name, club, role, phone, email };
+}
+
+function editLeagueTeam(id) {
+  const team = findById(state.leagueTable, id);
+  const updated = leagueTeamPrompt(team);
+  if (!updated) return;
+  Object.assign(team, updated);
+  state.notice = "League team edited.";
+  saveAndRender();
+}
+
+function leagueTeamPrompt(existing = {}) {
+  const team = prompt("Team name", existing.team || "Example Team");
+  if (team === null) return null;
+  const played = numberPrompt("Played", existing.played ?? 0);
+  if (played === null) return null;
+  const won = numberPrompt("Won", existing.won ?? 0);
+  if (won === null) return null;
+  const drawn = numberPrompt("Drawn", existing.drawn ?? 0);
+  if (drawn === null) return null;
+  const lost = numberPrompt("Lost", existing.lost ?? 0);
+  if (lost === null) return null;
+  const points = numberPrompt("Points", existing.points ?? 0);
+  if (points === null) return null;
+  return { team, played, won, drawn, lost, points };
+}
+
+function numberPrompt(label, value) {
+  const response = prompt(label, value);
+  if (response === null) return null;
+  const number = Number(response);
+  return Number.isNaN(number) ? null : number;
+}
+
+function deleteItem(collection, id, message) {
+  if (!confirm("Delete this item?")) return;
+  state[collection] = state[collection].filter((item) => item.id !== id);
+  state.notice = message;
+  saveAndRender();
+}
+
+function saveSettings() {
+  state.clubName = valueFromInput("setting-club-name") || "Club Name";
+  state.clubType = valueFromInput("setting-club-type") || "Sports Club";
+  state.clubVenue = valueFromInput("setting-club-venue");
+  state.clubContact = valueFromInput("setting-club-contact");
+  state.clubEmail = valueFromInput("setting-club-email");
+  state.clubPhone = valueFromInput("setting-club-phone");
+  state.colours = {
+    header: valueFromInput("setting-colour-header") || "#173b69",
+    section: valueFromInput("setting-colour-section") || "#2f8b57",
+    button: valueFromInput("setting-colour-button") || "#2f8b57"
   };
-  data.results = (data.results || []).map((result) => ({ id: result.id || id(), ...result }));
-  data.notice = "";
-  return data;
+  state.pin = valueFromInput("setting-pin") || "1234";
+  state.notice = "Settings saved.";
+  saveAndRender();
 }
 
-function saveAndRender() {
-  localStorage.setItem(storageKey, JSON.stringify({ ...state, notice: "" }));
-  app();
+function valueFromInput(id) {
+  return document.getElementById(id)?.value.trim() || "";
 }
 
-function value(elementId) {
-  const element = document.getElementById(elementId);
-  return element ? element.value.trim() : "";
+function printElement(id) {
+  const element = document.getElementById(id);
+  if (!element) return;
+  const printRoot = document.createElement("div");
+  printRoot.id = "print-root";
+  printRoot.innerHTML = `
+    <div class="print-header">
+      <h1>${escapeHtml(state.clubName || "Club Match Secretary Manager")}</h1>
+      <p>Club Match Secretary Manager - ${escapeHtml(readableDate(new Date()))}</p>
+    </div>
+    ${element.innerHTML}
+  `;
+  document.body.appendChild(printRoot);
+  document.body.classList.add("printing");
+  window.print();
+  document.body.classList.remove("printing");
+  printRoot.remove();
 }
 
-function id() {
-  return Math.random().toString(36).slice(2, 10);
+function exportCsv(type) {
+  const exports = {
+    fixtures: {
+      filename: "fixtures.csv",
+      headers: ["Date", "Time", "Home", "Away", "Venue", "Competition", "Status"],
+      rows: state.fixtures.map((item) => [item.date, item.time, item.home, item.away, item.venue, item.competition, item.status])
+    },
+    members: {
+      filename: "members.csv",
+      headers: ["Name", "Role", "Phone", "Email", "Availability"],
+      rows: state.players.map((item) => [item.name, item.role, item.phone, item.email, item.availability])
+    },
+    availability: {
+      filename: "availability.csv",
+      headers: ["Name", "Role", "Availability"],
+      rows: state.players.map((item) => [item.name, item.role, item.availability])
+    },
+    results: {
+      filename: "results.csv",
+      headers: ["Date", "Opponent", "Competition", "Score For", "Score Against", "Outcome"],
+      rows: state.results.map((item) => [item.date, item.opponent, item.competition, item.scoreFor, item.scoreAgainst, item.outcome])
+    },
+    league: {
+      filename: "league-table.csv",
+      headers: ["Team", "Played", "Won", "Drawn", "Lost", "Points"],
+      rows: state.leagueTable.map((item) => [item.team, item.played, item.won, item.drawn, item.lost, item.points])
+    }
+  };
+  const selected = exports[type];
+  if (!selected) return;
+  const csv = [selected.headers, ...selected.rows].map((row) => row.map(csvCell).join(",")).join("\n");
+  const blob = new Blob([csv], { type: "text/csv;charset=utf-8" });
+  const url = URL.createObjectURL(blob);
+  const link = document.createElement("a");
+  link.href = url;
+  link.download = selected.filename;
+  document.body.appendChild(link);
+  link.click();
+  link.remove();
+  URL.revokeObjectURL(url);
 }
 
-function today() {
-  return new Date().toISOString().slice(0, 10);
+function csvCell(value) {
+  return `"${String(value ?? "").replaceAll('"', '""')}"`;
+}
+
+function renderTeamPrintRows() {
+  return state.team.length
+    ? `<table><thead><tr><th>Position</th><th>Player</th></tr></thead><tbody>${state.team.map((item) => `<tr><td>${escapeHtml(item.position)}</td><td>${escapeHtml(item.playerName)}</td></tr>`).join("")}</tbody></table>`
+    : "<p>No team selected.</p>";
+}
+
+function renderMemberPrintRows() {
+  return `<table><thead><tr><th>Member</th><th>Role</th><th>Phone</th><th>Email</th><th>Availability</th></tr></thead><tbody>${state.players.map((item) => `<tr><td>${escapeHtml(item.name)}</td><td>${escapeHtml(item.role)}</td><td>${escapeHtml(item.phone)}</td><td>${escapeHtml(item.email)}</td><td>${escapeHtml(item.availability)}</td></tr>`).join("")}</tbody></table>`;
+}
+
+function renderFixturePrintRows() {
+  return `<table><thead><tr><th>Date</th><th>Time</th><th>Home</th><th>Away</th><th>Venue</th><th>Competition</th><th>Status</th></tr></thead><tbody>${state.fixtures.map((item) => `<tr><td>${formatDate(item.date)}</td><td>${escapeHtml(item.time)}</td><td>${escapeHtml(item.home)}</td><td>${escapeHtml(item.away)}</td><td>${escapeHtml(item.venue)}</td><td>${escapeHtml(item.competition)}</td><td>${escapeHtml(item.status)}</td></tr>`).join("")}</tbody></table>`;
+}
+
+function renderAvailabilityPrintRows() {
+  return `<table><thead><tr><th>Player</th><th>Role</th><th>Availability</th></tr></thead><tbody>${state.players.map((item) => `<tr><td>${escapeHtml(item.name)}</td><td>${escapeHtml(item.role)}</td><td>${escapeHtml(item.availability)}</td></tr>`).join("")}</tbody></table>`;
+}
+
+function renderResultPrintRows() {
+  return `<table><thead><tr><th>Date</th><th>Opponent</th><th>Competition</th><th>Score</th><th>Outcome</th></tr></thead><tbody>${state.results.map((item) => `<tr><td>${formatDate(item.date)}</td><td>${escapeHtml(item.opponent)}</td><td>${escapeHtml(item.competition)}</td><td>${item.scoreFor} - ${item.scoreAgainst}</td><td>${escapeHtml(item.outcome)}</td></tr>`).join("")}</tbody></table>`;
+}
+
+function renderLeaguePrintRows() {
+  return `<table><thead><tr><th>Team</th><th>Played</th><th>Won</th><th>Drawn</th><th>Lost</th><th>Points</th></tr></thead><tbody>${state.leagueTable.map((item) => `<tr><td>${escapeHtml(item.team)}</td><td>${item.played}</td><td>${item.won}</td><td>${item.drawn}</td><td>${item.lost}</td><td>${item.points}</td></tr>`).join("")}</tbody></table>`;
 }
 
 function nextPowerOfTwo(number) {
   return Math.pow(2, Math.ceil(Math.log2(number)));
 }
 
-function roundName(index, total) {
+function tournamentRoundName(index, total) {
   const remaining = total - index;
   if (remaining === 1) return "Final";
   if (remaining === 2) return "Semi Finals";
@@ -868,20 +1276,94 @@ function shuffle(items) {
   return items;
 }
 
-function normalAvailability(valueText) {
-  const lowered = String(valueText).toLowerCase();
-  if (["yes", "y", "available", "true"].includes(lowered)) return "yes";
-  if (["no", "n", "unavailable", "false"].includes(lowered)) return "no";
-  return "maybe";
+function findById(collection, id) {
+  return collection.find((item) => item.id === id);
+}
+
+function loadState() {
+  const saved = localStorage.getItem(STORAGE_KEY);
+  if (!saved) return structuredClone(demoData);
+  try {
+    const loaded = { ...structuredClone(demoData), ...JSON.parse(saved), notice: "" };
+    loaded.tournament = { ...structuredClone(demoData.tournament), ...(loaded.tournament || {}) };
+    loaded.colours = { ...structuredClone(demoData.colours), ...(loaded.colours || {}) };
+    loaded.pin = loaded.pin || "1234";
+    loaded.transport = loaded.transport || [];
+    loaded.catering = loaded.catering || [];
+    loaded.contacts = loaded.contacts || [];
+    return loaded;
+  } catch {
+    return structuredClone(demoData);
+  }
+}
+
+function themeStyle() {
+  const colours = state.colours || demoData.colours;
+  return [
+    `--navy:${escapeAttr(colours.header)}`,
+    `--navy-light:${lightenHex(colours.header, 18)}`,
+    `--green:${escapeAttr(colours.section)}`,
+    `--green-dark:${darkenHex(colours.section, 16)}`,
+    `--button-colour:${escapeAttr(colours.button)}`
+  ].join(";");
+}
+
+function lightenHex(hex, amount) {
+  return adjustHex(hex, amount);
+}
+
+function darkenHex(hex, amount) {
+  return adjustHex(hex, -amount);
+}
+
+function adjustHex(hex, amount) {
+  const clean = String(hex || "#173b69").replace("#", "");
+  if (!/^[0-9a-f]{6}$/i.test(clean)) return hex;
+  const parts = [clean.slice(0, 2), clean.slice(2, 4), clean.slice(4, 6)];
+  const adjusted = parts.map((part) => {
+    const value = Math.max(0, Math.min(255, parseInt(part, 16) + amount));
+    return value.toString(16).padStart(2, "0");
+  });
+  return `#${adjusted.join("")}`;
+}
+
+function saveAndRender() {
+  localStorage.setItem(STORAGE_KEY, JSON.stringify({ ...state, notice: "" }));
+  render();
+}
+
+function createId() {
+  return Math.random().toString(36).slice(2, 10);
+}
+
+function today() {
+  return new Date().toISOString().slice(0, 10);
 }
 
 function formatDate(date) {
   if (!date) return "";
-  return new Intl.DateTimeFormat("en-GB", { year: "numeric", month: "short", day: "numeric" }).format(new Date(`${date}T12:00:00`));
+  return new Intl.DateTimeFormat("en-GB", { day: "2-digit", month: "short", year: "numeric" }).format(new Date(`${date}T12:00:00`));
 }
 
-function escapeHtml(valueText) {
-  return String(valueText || "")
+function readableDate(date) {
+  return new Intl.DateTimeFormat("en-GB", { day: "2-digit", month: "long", year: "numeric" }).format(date);
+}
+
+function normaliseAvailability(value) {
+  const lower = String(value).toLowerCase();
+  if (lower.startsWith("avail")) return "Available";
+  if (lower.startsWith("un")) return "Unavailable";
+  return "Unsure";
+}
+
+function availabilityClass(value) {
+  if (value === "Available") return "success-badge";
+  if (value === "Unavailable") return "danger-badge";
+  return "warning-badge";
+}
+
+function escapeHtml(value) {
+  return String(value ?? "")
     .replaceAll("&", "&amp;")
     .replaceAll("<", "&lt;")
     .replaceAll(">", "&gt;")
@@ -889,8 +1371,8 @@ function escapeHtml(valueText) {
     .replaceAll("'", "&#039;");
 }
 
-function escapeAttr(valueText) {
-  return escapeHtml(valueText);
+function escapeAttr(value) {
+  return escapeHtml(value);
 }
 
-app();
+render();
